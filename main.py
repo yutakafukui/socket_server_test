@@ -35,5 +35,6 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                         break
                     print(received_message)
                 except:
+                    print("except")
                     break
         sys.exit()
