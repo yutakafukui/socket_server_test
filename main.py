@@ -9,7 +9,8 @@ received_message = None
 port = 8001                  # 使用するポート
 
 # IPアドレス取得
-ip = socket.gethostbyname(socket.gethostname())
+# ip = socket.gethostbyname(socket.gethostname())
+ip = "192.168.0.103"
 print("Server: " + ip)
 print("Port: " + str(port))
 
@@ -28,13 +29,21 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         with conn:
             while True:
                 try:
+                    # 受信
                     received_message = conn.recv(4096)
                     received_message = received_message.decode()
-                    if received_message == "exit":
-                        print("exit")
-                        break
                     print(received_message)
+
+                    if received_message == "disconnect":  # "dissconect"の場合は、強制終了
+                        print(received_message)
+                        break
+                    else:
+                        positions = []  # 座標をここに保持
+                        temp = received_message.split(",")  # カンマで区切る
+                        for pos in temp:
+                            positions.append(float(pos))    # floatに変換しながら保持
+                        print(positions)
                 except:
-                    print("except")
+                    print("quit")
                     break
         sys.exit()
