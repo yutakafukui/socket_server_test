@@ -13,7 +13,8 @@ port = 8001                  # 使用するポート
 
 # IPアドレス取得
 # ip = socket.gethostbyname(socket.gethostname())
-ip = "192.168.0.103"
+#ip = "192.168.0.103"
+ip = "192.168.68.104"
 # ip = "127.0.0.1"    # ローカルホストで通信のテストをするならこちら
 print("Server: " + ip)
 print("Port: " + str(port))
@@ -50,18 +51,13 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                     print(positions)
 
                     # ベクトルの算出
-                    # vectors = [0, 1, 1, 1]
-                    # vectors = [0, 1]
                     vectors = []
                     loop_num = (int)(len(positions) / 2)  - 1
-                    # print(vector_num)
                     cnt = 0
                     for i in range(0, loop_num):
                         vectors.append(positions[cnt + 2] - positions[cnt])
                         vectors.append(positions[cnt + 3] - positions[cnt + 1])
                         cnt = cnt + 2
-                        # print(positions[i+2] - positions[i])
-                        # print(positions[i+3] - positions[i+1])
                     print("Vectors: ")
                     print(vectors)
 
@@ -86,6 +82,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                     loop_num = (int)(len(normalized_vectors) / 2) - 1
                     cnt = 0
                     for i in range(0, loop_num):
+                        # 内積から角度を算出
                         x1 = normalized_vectors[cnt]
                         y1 = normalized_vectors[cnt + 1]
                         x2 = normalized_vectors[cnt + 2]
@@ -93,7 +90,14 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                         cos_theta = (x1 * x2 + y1 * y2) / (math.sqrt(x1 * x1 + y1 * y1) * math.sqrt(x2 * x2 + y2 * y2))
                         theta_radian = math.acos(cos_theta)
                         theta_degree = theta_radian * (180 / math.pi)
-                        angles.append(theta_degree)
+                        # 外積から角度の正負を決める
+                        dot_product =x1 * y2 - x2 * y1
+                        if dot_product > 0:
+                            direction = -1
+                        else:
+                            direction = 1
+                        # 角度をリストに保持
+                        angles.append(theta_degree * direction)
                         cnt = cnt + 2
                     print("Angles(deg): ")
                     print(angles)
