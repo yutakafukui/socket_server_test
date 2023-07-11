@@ -33,20 +33,20 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         try:
             with conn:
                 while True:
-                        # 受信
-                        received_message = conn.recv(4096)
-                        received_message = received_message.decode()
-                        print("Received message :" + received_message)
+                    # 受信
+                    received_message = conn.recv(4096)
+                    received_message = received_message.decode()
+                    print("Received message :" + received_message)
 
-                        if received_message == "disconnect":  # "dissconect"の場合は、強制終了
-                            print(received_message)
-                            raise ValueError("disconnected")    # これじゃexceptに行かない・・・
-                        else:
-                            positions = []  # 座標をここに保持
-                            temp = received_message.split(",")  # カンマで区切る
-                            for pos in temp:
-                                positions.append(float(pos))    # floatに変換しながら保持
-                            # print(positions)
+                    if received_message == "disconnect":  # "dissconect"の場合は、強制終了
+                        # print(received_message)
+                        raise ValueError("disconnect")
+                    else:
+                        positions = []  # 座標をここに保持
+                        temp = received_message.split(",")  # カンマで区切る
+                        for pos in temp:
+                            positions.append(float(pos))    # floatに変換しながら保持
+                        # print(positions)
         except:
-            print("e3")
+            print("disconnected")
             break
